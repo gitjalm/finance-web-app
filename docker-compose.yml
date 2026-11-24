@@ -1,0 +1,29 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+    ports:
+      - "5173:5173"
+    networks:
+      - my_network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+    ports:
+      - "8000:8000"
+    networks:
+      - my_network
+    volumes:
+      - ./backend:/app
+
+networks:
+  my_network:
+    driver: bridge
